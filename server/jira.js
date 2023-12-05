@@ -4,16 +4,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-if (process.env.NODE_ENV === 'development') {
-    const username = process.env.JIRA_USER_NAME_DEV
-    const password = process.env.JIRA_API_TOKEN_DEV
-    const domain = process.env.JIRA_LINK_DEV
-}
-else{
-    const username = process.env.JIRA_USER_NAME_PRD
-    const password = process.env.JIRA_API_TOKEN_PRD
-    const domain = process.env.JIRA_LINK_PRD    
-}
+const username = process.env.JIRA_USER_NAME_DEV
+const password = process.env.JIRA_API_TOKEN_DEV
+const domain = process.env.JIRA_LINK_DEV
+
+// if (process.env.NODE_ENV === 'development') {
+//     const username = process.env.JIRA_USER_NAME_DEV
+//     const password = process.env.JIRA_API_TOKEN_DEV
+//     const domain = process.env.JIRA_LINK_DEV
+// }
+// else{
+//     const username = process.env.JIRA_USER_NAME_PRD
+//     const password = process.env.JIRA_API_TOKEN_PRD
+//     const domain = process.env.JIRA_LINK_PRD    
+// }
 
 const auth = {
     username: username,
