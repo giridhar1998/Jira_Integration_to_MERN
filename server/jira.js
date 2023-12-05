@@ -37,7 +37,7 @@ const jiraData = asyncHandler( async (req, res) => {
         console.log(error.response.data.errors)
         // res.status(500).json({ error: 'Failed to fetch Jira data' });
     }
-}
+});
 // const jiraData = asyncHandler( async (req, res) => {
 //     try {
 //         const jiraApiUrl = 'https://apintegration.atlassian.net/rest/api/2/dashboard/10000'; 
