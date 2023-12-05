@@ -1,2 +1,11 @@
 # Jira_Integration_to_MERN
 MERN Stack Project with Jira API Integration
+
+# ngrok auth token
+2YyoZZ02heP9WWSGHVLgzr23HXS_3upPEVgb5k2HCSVhSuWge
+
+
+2YzTBLubqC2AyW2w9iS0bRNv74g_vBwj1JEQYGRKuQJvQmgz
+
+# Jira API Token
+ATATT3xFfGF0_oBUcCQXVYL_Kt46-i5S1sQ9Ax0ned4-W13e0zuQbZzZzQmHjCIU7aishQjTGXYYiqqXj2v5nKp8hc7T13lPLxThatZshYL2C0w7KLvYb65ass4FaNxErkOd5l9hDAuJ3ZYiNQlfNEizzcqDWFyuUuxj_I957z49qxnTU2E9gVs=E3DBB934
