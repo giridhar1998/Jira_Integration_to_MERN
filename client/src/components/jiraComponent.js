@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
+import '../index.css';
 
 const JiraComponent = () => {
   const [jiraData, setJiraData] = useState(null);
@@ -28,17 +29,22 @@ const JiraComponent = () => {
     }
   };
 
+  const calculatePercentage = (value, total) => {
+    return ((value / total) * 100).toFixed(2);
+  };
+
   return (
     <div>
       <h1>Jira Dashboard</h1>
       {jiraData ? (
         <div>
-          <p>Project Name: {jiraData.projectName}</p>
-          <table>
+          <h2>Project Name: {jiraData.projectName}</h2>
+          <table className="styled-table">
             <thead>
               <tr>
                 <th>User</th>
                 <th>Count</th>
+                <th>Percentage</th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +52,7 @@ const JiraComponent = () => {
                 <tr key={index}>
                   <td>{user.key}</td>
                   <td>{user.value}</td>
+                  <td>{calculatePercentage(user.value, jiraData.total)}%</td>
                 </tr>
               ))}
             </tbody>
