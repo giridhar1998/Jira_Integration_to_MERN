@@ -38,11 +38,11 @@ const JiraComponent = () => {
       <h1>Jira Dashboard</h1>
       {jiraData ? (
         <div>
-          <h2>Project Name: {jiraData.projectName}</h2>
+          <p>Project Name: {jiraData.projectName}</p>
           <table className="styled-table">
             <thead>
               <tr>
-                <th>User</th>
+                <th>Assignee</th>
                 <th>Count</th>
                 <th>Percentage</th>
               </tr>
@@ -52,7 +52,14 @@ const JiraComponent = () => {
                 <tr key={index}>
                   <td>{user.key}</td>
                   <td>{user.value}</td>
-                  <td>{calculatePercentage(user.value, jiraData.total)}%</td>
+                  <td>
+                    <div className="progress-bar-container">
+                      <div
+                        className="progress-bar"
+                        style={{ width: `${calculatePercentage(user.value, jiraData.total)}%` }}
+                      ></div>
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
