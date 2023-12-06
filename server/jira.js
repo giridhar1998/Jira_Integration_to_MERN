@@ -8,17 +8,6 @@ const username = process.env.JIRA_USER_NAME_DEV
 const password = process.env.JIRA_API_TOKEN_DEV
 const domain = process.env.JIRA_LINK_DEV
 
-// if (process.env.NODE_ENV === 'development') {
-//     const username = process.env.JIRA_USER_NAME_DEV
-//     const password = process.env.JIRA_API_TOKEN_DEV
-//     const domain = process.env.JIRA_LINK_DEV
-// }
-// else{
-//     const username = process.env.JIRA_USER_NAME_PRD
-//     const password = process.env.JIRA_API_TOKEN_PRD
-//     const domain = process.env.JIRA_LINK_PRD    
-// }
-
 const auth = {
     username: username,
     password: password
@@ -26,39 +15,58 @@ const auth = {
 
 const jiraData = asyncHandler( async (req, res) => {
     try{
+        // geting data of issues from jira
         const baseUrl = 'https://' + domain + '.atlassian.net';
         const config = {
             method: 'get',
-            url: baseUrl + '/rest/api/2/dashboard/10000',
+            url: baseUrl + '/rest/api/2/search',
             headers: { 'Content-Type': 'application/json' },
             auth: auth
           };
           const response = await axios.request(config);
-          console.log(response.data)
-        //   res.json(response.data);
+          console.log(response.data);
+
+          // converting response into json format
+          const jsonFormat = response.data;
+
+          // getting project name from response
+          const project = jsonFormat.issues[0].fields.project.name;
+          console.log(project);
+
+          // main logic to get dashboard data
+          let user = 0;
+          let nonUser = 0;
+          for (let i = 0; i < jsonFormat.issues.length; i++){
+            if(jsonFormat.issues[i].fields.assignee == null){
+                nonUser++;
+            }
+            else{
+                user++;
+            }
+          }
+
+          // initializing response data object
+          const responseData = {
+            projectName: project,
+            users: [
+                {key: 'Giridhar', value: user},
+                {key: 'Unassigned', value: nonUser}
+            ]
+          };
+
+          // Convert the updated JavaScript object to JSON format
+          const jsonResponse = JSON.stringify(responseData);
+          console.log(jsonResponse);
+
+          // Set the appropriate headers and send the updated JSON response
+          res.setHeader('Content-Type', 'application/json');
+          res.send(jsonResponse);
+
     } catch(error) {
         console.error('Error fetching Jira data:', error);
-        console.log(error.response.data.errors)
-        // res.status(500).json({ error: 'Failed to fetch Jira data' });
+        res.status(500).json({ error: 'Failed to fetch Jira data' });
     }
 });
-// const jiraData = asyncHandler( async (req, res) => {
-//     try {
-//         const jiraApiUrl = 'https://apintegration.atlassian.net/rest/api/2/dashboard/10000'; 
-
-//         const config = {
-//             headers: {
-//                 'Authorization': 'Basic ' + Buffer.from('ram101singh@gmail.com:ATATT3xFfGF0ZWdupnsqjF3vhAdW0Kv8ODQy4yTtp2NqahOcvQIzro7erlt3m7LEPNYQzzJdL-iw_7ZQmwwoBLvto8i8mf7isT91QS7qEsIVLKRsoYmUHT8sqyYiTocw2jLlnKQE8zS0_2Ot1FwrUv85FoAtQ_5iVWTMG-7pB-lkBAnaPv5fRRU=F3914F70').toString('base64'),
-//                 'Accept': 'application/json'
-//             }
-//         };
-//         const response = await axios.get(jiraApiUrl, config);
-//         res.json(response.data);
-//     } catch(error) {
-//         console.error('Error fetching Jira data:', error);
-//         res.status(500).json({ error: 'Failed to fetch Jira data' });
-//     }
-// });
 
 export {
     jiraData

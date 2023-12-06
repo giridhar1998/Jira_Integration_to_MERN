@@ -10,7 +10,7 @@ const JiraComponent = () => {
 
   const fetchJiraData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/jiraData');
+      const response = await fetch('http://127.0.0.1:5000/api');
       
       if (!response.ok) {
         throw new Error('Failed to fetch Jira data');
@@ -28,9 +28,6 @@ const JiraComponent = () => {
       <h2>Jira Dashboard</h2>
       {jiraData ? (
         <div className="dashboard-content">
-          {/* Render Jira data in a structured way */}
-          {/* Modify this part to display relevant Jira data */}
-          {/* Example: */}
           <div className="issue-list">
             <h3>Recent Issues:</h3>
             <ul>
@@ -49,5 +46,7 @@ const JiraComponent = () => {
     </div>
   );
 };
+
+
 
 export default JiraComponent;
