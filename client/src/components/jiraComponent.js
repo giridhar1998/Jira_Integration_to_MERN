@@ -11,8 +11,10 @@ const JiraComponent = () => {
 
   const fetchJiraData = async () => {
     try {
+      console.log('Before Axios request');
       // fetching jira data from backend
       const response = await axios.get('http://127.0.0.1:5000/api');
+      console.log('After Axios request');
       
       if (response.status !== 200) {
         throw new Error('Failed to fetch Jira data');
@@ -28,7 +30,7 @@ const JiraComponent = () => {
 
   return (
     <div>
-      <h2>Jira API Integration</h2>
+      <h1>Jira Dashboard</h1>
       {jiraData ? (
         <div>
           <p>Project Name: {jiraData.projectName}</p>

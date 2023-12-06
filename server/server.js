@@ -3,10 +3,13 @@ import dotenv from 'dotenv'
 import morgan from 'morgan'
 import defaultRoutes from './router.js'
 import { notFound, errorHandler } from './errorMiddleware.js'
+import cors from 'cors'
 
 dotenv.config()
 
 const app = express();
+
+app.use(cors());
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
