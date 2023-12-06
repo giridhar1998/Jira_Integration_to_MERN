@@ -24,14 +24,12 @@ const jiraData = asyncHandler( async (req, res) => {
             auth: auth
           };
           const response = await axios.request(config);
-          console.log(response.data);
 
           // converting response into json format
           const jsonFormat = response.data;
 
           // getting project name from response
           const project = jsonFormat.issues[0].fields.project.name;
-          console.log(project);
 
           // main logic to get dashboard data
           let user = 0;
@@ -44,19 +42,22 @@ const jiraData = asyncHandler( async (req, res) => {
                 user++;
             }
           }
+          let total = user + nonUser;
 
           // initializing response data object
           const responseData = {
             projectName: project,
+            total: total,
             users: [
                 {key: 'Giridhar', value: user},
-                {key: 'Unassigned', value: nonUser}
+                {key: 'Unassigned', value: nonUser},
+                {key: 'Total', value: total}
             ]
           };
 
           // Convert the updated JavaScript object to JSON format
           const jsonResponse = JSON.stringify(responseData);
-          console.log(jsonResponse);
+        //   console.log(jsonResponse);
 
           // Set the appropriate headers and send the updated JSON response
           res.setHeader('Content-Type', 'application/json');

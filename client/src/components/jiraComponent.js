@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 
 const JiraComponent = () => {
   const [jiraData, setJiraData] = useState(null);
@@ -10,13 +11,15 @@ const JiraComponent = () => {
 
   const fetchJiraData = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/api');
+      // fetching jira data from backend
+      const response = await axios.get('http://127.0.0.1:5000/api');
       
-      if (!response.ok) {
+      if (response.status !== 200) {
         throw new Error('Failed to fetch Jira data');
       }
       
-      const data = await response.json();
+      const data = await response.data;
+      console.log(data);
       setJiraData(data);
     } catch (error) {
       console.error('Error fetching Jira data:', error);
@@ -24,29 +27,33 @@ const JiraComponent = () => {
   };
 
   return (
-    <div className="jira-dashboard">
-      <h2>Jira Dashboard</h2>
+    <div>
+      <h2>Jira API Integration</h2>
       {jiraData ? (
-        <div className="dashboard-content">
-          <div className="issue-list">
-            <h3>Recent Issues:</h3>
-            <ul>
-              {jiraData.issues.map(issue => (
-                <li key={issue.id}>
-                  <strong>{issue.key}:</strong> {issue.summary}
-                </li>
+        <div>
+          <p>Project Name: {jiraData.projectName}</p>
+          <table>
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Count</th>
+              </tr>
+            </thead>
+            <tbody>
+              {jiraData.users.map((user, index) => (
+                <tr key={index}>
+                  <td>{user.key}</td>
+                  <td>{user.value}</td>
+                </tr>
               ))}
-            </ul>
-          </div>
-          {/* Add more sections to display different Jira data */}
+            </tbody>
+          </table>
         </div>
       ) : (
-        <p>Loading Jira data...</p>
+        <p>Loading...</p>
       )}
     </div>
   );
 };
-
-
 
 export default JiraComponent;
