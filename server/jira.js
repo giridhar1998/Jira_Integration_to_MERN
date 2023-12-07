@@ -31,6 +31,8 @@ const jiraData = asyncHandler( async (req, res) => {
           // getting project name from response
           const project = jsonFormat.issues[0].fields.project.name;
 
+          let total = 0;
+
           const responseData = {
             projectName: project,
             total: total,
@@ -41,7 +43,7 @@ const jiraData = asyncHandler( async (req, res) => {
 
           // main logic to get dashboard data
           for (let i = 0; i < jsonFormat.issues.length; i++){
-            if(jsonFormat.issues[i].fields.assignee == null){
+            if(jsonFormat.issues[i].fields.assignee === null){
                 if(usersMap.has("Unassigned") === true){
                   let ans = usersMap.get("Unassigned");
                   usersMap.set("Unassigned", ans+1);
@@ -51,35 +53,24 @@ const jiraData = asyncHandler( async (req, res) => {
                 }
             }
             else{
-              const assignee = jsonFormat.issues[i].fields.assignee.displayname;
-              if(usersMap.has(assignee) === true){
-                let ans = usersMap.get("Unassigned");
-                usersMap.set(assignee, ans+1);
+              const assignees = jsonFormat.issues[i].fields.assignee.displayName;
+              if(usersMap.has(assignees) === true){
+                let ans = usersMap.get(assignees);
+                usersMap.set(assignees, ans+1);
               }
               else{
-                usersMap.set(assignee, 1);
+                usersMap.set(assignees, 1);
               }
             }
           }
           
-          let total = 0;
           for (const [key, value] of usersMap.entries()) {
-            total = total + '${value}';
-            responseData.users.push({ key: '${key}', value: '${value}'});
+            total = total + value;
+            responseData.users.push({ key: `${key}`, value: value });
           }
 
           responseData.users.push({ key: 'Total', value: total });
-
-          // // initializing response data object
-          // const responseData = {
-          //   projectName: project,
-          //   total: total,
-          //   users: [
-          //       {key: 'Giridhar', value: user},
-          //       {key: 'Unassigned', value: nonUser},
-          //       {key: 'Total', value: total}
-          //   ]
-          // };
+          responseData.total = total;
 
           // Convert the updated JavaScript object to JSON format
           const jsonResponse = JSON.stringify(responseData);

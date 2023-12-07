@@ -30,6 +30,7 @@ const JiraComponent = () => {
   };
 
   const calculatePercentage = (value, total) => {
+    console.log("value: ", value, "tottal: ", total);
     return ((value / total) * 100).toFixed(2);
   };
 
@@ -53,12 +54,16 @@ const JiraComponent = () => {
                   <td>{user.key}</td>
                   <td>{user.value}</td>
                   <td>
-                    <div className="progress-bar-container">
+                    
+                    {user.key !== "Total" && (
+                      <div className="progress-bar-container">
                       <div
                         className="progress-bar"
                         style={{ width: `${calculatePercentage(user.value, jiraData.total)}%` }}
                       ></div>
-                    </div>
+                      </div>
+                    )}
+                    
                   </td>
                 </tr>
               ))}
