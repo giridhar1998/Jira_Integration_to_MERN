@@ -5,7 +5,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "heroku-postbuild": "npm run install-client && npm run build",
     "start": "node server/server",
     "server": "nodemon server/server",
     "client": "npm start --prefix client",
@@ -19,7 +21,7 @@
     "NodeJS",
     "ReactJS",
     "Jira",
-    "Netlify"
+    "Heroku"
   ],
   "author": "Giridhar Boyana",
   "license": "ISC",

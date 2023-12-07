@@ -4,9 +4,16 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const username = process.env.JIRA_USER_NAME_DEV
-const password = process.env.JIRA_API_TOKEN_DEV
-const domain = process.env.JIRA_LINK_DEV
+if(NODE_ENV === production){
+  const username = JIRA_USER_NAME_PRD
+  const password = JIRA_API_TOKEN_PRD
+  const domain = JIRA_LINK_PRD
+}
+else {
+  const username = process.env.JIRA_USER_NAME_DEV
+  const password = process.env.JIRA_API_TOKEN_DEV
+  const domain = process.env.JIRA_LINK_DEV
+}
 
 const auth = {
     username: username,
