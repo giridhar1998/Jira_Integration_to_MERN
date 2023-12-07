@@ -13,6 +13,8 @@ const auth = {
     password: password
   };
 
+const encodedCredentials = Buffer.from(`${auth.username}:${auth.password}`).toString('base64');
+
 const jiraData = asyncHandler( async (req, res) => {
     try{
         // geting data of issues from jira
@@ -20,8 +22,10 @@ const jiraData = asyncHandler( async (req, res) => {
         const config = {
             method: 'get',
             url: baseUrl + '/rest/api/2/search',
-            headers: { 'Content-Type': 'application/json' },
-            auth: auth
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Basic ${encodedCredentials}`
+            }
           };
           const response = await axios.request(config);
 
