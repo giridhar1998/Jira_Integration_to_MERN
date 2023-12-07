@@ -29,39 +29,56 @@ const jiraData = asyncHandler( async (req, res) => {
           };
           const response = await axios.request(config);
 
-          // converting response into json format
+          // getting data from axios
           const jsonFormat = response.data;
 
           // getting project name from response
           const project = jsonFormat.issues[0].fields.project.name;
 
-          // main logic to get dashboard data
-          let user = 0;
-          let nonUser = 0;
-          for (let i = 0; i < jsonFormat.issues.length; i++){
-            if(jsonFormat.issues[i].fields.assignee == null){
-                nonUser++;
-            }
-            else{
-                user++;
-            }
-          }
-          let total = user + nonUser;
+          let total = 0;
 
-          // initializing response data object
           const responseData = {
             projectName: project,
             total: total,
-            users: [
-                {key: 'Giridhar', value: user},
-                {key: 'Unassigned', value: nonUser},
-                {key: 'Total', value: total}
-            ]
+            users: []
           };
+
+          const usersMap = new Map();
+
+          // main logic to get dashboard data
+          for (let i = 0; i < jsonFormat.issues.length; i++){
+            if(jsonFormat.issues[i].fields.assignee === null){
+                if(usersMap.has("Unassigned") === true){
+                  let ans = usersMap.get("Unassigned");
+                  usersMap.set("Unassigned", ans+1);
+                }
+                else{
+                  usersMap.set("Unassigned", 1);
+                }
+            }
+            else{
+              const assignees = jsonFormat.issues[i].fields.assignee.displayName;
+              if(usersMap.has(assignees) === true){
+                let ans = usersMap.get(assignees);
+                usersMap.set(assignees, ans+1);
+              }
+              else{
+                usersMap.set(assignees, 1);
+              }
+            }
+          }
+          
+          for (const [key, value] of usersMap.entries()) {
+            total = total + value;
+            responseData.users.push({ key: `${key}`, value: value });
+          }
+
+          responseData.users.push({ key: 'Total', value: total });
+          responseData.total = total;
 
           // Convert the updated JavaScript object to JSON format
           const jsonResponse = JSON.stringify(responseData);
-        //   console.log(jsonResponse);
+          console.log(jsonResponse);
 
           // Set the appropriate headers and send the updated JSON response
           res.setHeader('Content-Type', 'application/json');
